@@ -1,13 +1,15 @@
 import ServerWallet from "./Wallet";
 
 class TradingAgent {
-  wallet: ServerWallet;
+  walletProvider: ServerWallet;
 
   constructor() {
-    this.wallet = new ServerWallet();
+    this.walletProvider = new ServerWallet();
   }
 
   async makeDecision() {
+    console.log("Making trading decision...");
+    console.log(this.walletProvider.wallet.address);
     // TODO
     // 1. Add a model invocation
     // 2. to maodel give a tool to get all the agents  (hardcode to 3) + get all the state in blochain
