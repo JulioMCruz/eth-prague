@@ -9,8 +9,8 @@ class TradingAgent {
 
   async makeDecision() {
     // TODO
-    // 1. Add a model invokation
-    // 2. to maodel give a tool to get all the agents  (hardcode to 3)
+    // 1. Add a model invocation
+    // 2. to maodel give a tool to get all the agents  (hardcode to 3) + get all the state in blochain
     // 3. give the strategy data
     // 4. ask it to give the token address and the amount to sell or buy
     // 5. it cna either sell or buy or hold
