@@ -7,7 +7,7 @@ import {
 
 export const config = getDefaultConfig({
   appName: 'ETH Global Prague 2025',
-  projectId: 'YOUR_PROJECT_ID',
+  projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '',
   chains: [
     flare,
     flareTestnet,
