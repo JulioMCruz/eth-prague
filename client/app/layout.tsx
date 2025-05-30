@@ -1,10 +1,9 @@
-'use client';
+"use client"
 
 // import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import '@rainbow-me/rainbowkit/styles.css';
-
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
@@ -28,6 +27,7 @@ const geistMono = Geist_Mono({
 
 const client = new QueryClient();
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,7 +38,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <WagmiProvider config={config}>
+        <WagmiProvider config={config} reconnectOnMount={false}>
           <QueryClientProvider client={client}>
             <RainbowKitProvider modalSize="compact">
               {children}
