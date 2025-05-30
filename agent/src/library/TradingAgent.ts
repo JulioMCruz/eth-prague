@@ -2,6 +2,7 @@ import { streamText } from "ai";
 import { groq } from "@ai-sdk/groq";
 import ServerWallet from "./Wallet";
 import StrategyContract from "./StrategyContract";
+import { tokens } from "../constant/tokens";
 
 interface TradingDecision {
   action: "buy" | "sell" | "hold";
@@ -12,14 +13,49 @@ interface TradingDecision {
 }
 
 interface MemeToken {
-  address: string;
-  symbol: string;
+  id: number;
   name: string;
-  price: string;
-  marketCap: string;
-  volume24h: string;
-  priceChange24h: string;
-  trending: boolean;
+  symbol: string;
+  address: string;
+  slug: string;
+  cmcRank: number;
+  marketPairCount: number;
+  circulatingSupply: number;
+  selfReportedCirculatingSupply: number;
+  totalSupply: number;
+  maxSupply: number;
+  ath: number;
+  atl: number;
+  high24h: number;
+  low24h: number;
+  isActive: number;
+  lastUpdated: string;
+  dateAdded: string;
+  quotes: Array<{
+    name: string;
+    price: number;
+    volume24h: number;
+    volume7d: number;
+    volume30d: number;
+    marketCap: number;
+    selfReportedMarketCap: number;
+    percentChange1h: number;
+    percentChange24h: number;
+    percentChange7d: number;
+    lastUpdated: string;
+    percentChange30d: number;
+    percentChange60d: number;
+    percentChange90d: number;
+    fullyDilluttedMarketCap: number;
+    marketCapByTotalSupply: number;
+    dominance: number;
+    turnover: number;
+    ytdPriceChangePercentage: number;
+    percentChange1y: number;
+  }>;
+  isAudited: boolean;
+  auditInfoList: Array<any>;
+  badges: Array<any>;
 }
 
 class TradingAgent {
@@ -60,7 +96,7 @@ class TradingAgent {
         totalGains: "3.2", // ETH
         totalLosses: "1.9", // ETH
         netPnL: "1.3", // ETH (+21.9%)
-        availableCash: "1.1", // ETH
+        availableCash: "0.1", // ETH
         totalUsers: "5",
         activePositions: "3",
       },
@@ -96,64 +132,22 @@ class TradingAgent {
     }
   }
 
-  async getTrendingMemeCoins(): Promise<MemeToken[]> {
+  async getTrendingMemeCoins(): Promise<any> {
     console.log("🔥 Getting trending meme coins...");
 
-    // Hardcoded top meme coins for now - in production, use real API
-    const memeCoins: MemeToken[] = [
-      {
-        address: "0x1234567890123456789012345678901234567890",
-        symbol: "PEPE",
-        name: "Pepe",
-        price: "0.000001",
-        marketCap: "500000000",
-        volume24h: "50000000",
-        priceChange24h: "+15.5",
-        trending: true,
-      },
-      {
-        address: "0x2345678901234567890123456789012345678901",
-        symbol: "DOGE",
-        name: "Dogecoin",
-        price: "0.08",
-        marketCap: "11000000000",
-        volume24h: "800000000",
-        priceChange24h: "-2.3",
-        trending: false,
-      },
-      {
-        address: "0x3456789012345678901234567890123456789012",
-        symbol: "SHIB",
-        name: "Shiba Inu",
-        price: "0.000008",
-        marketCap: "4700000000",
-        volume24h: "200000000",
-        priceChange24h: "+8.7",
-        trending: true,
-      },
-      {
-        address: "0x4567890123456789012345678901234567890123",
-        symbol: "FLOKI",
-        name: "Floki Inu",
-        price: "0.00015",
-        marketCap: "1400000000",
-        volume24h: "45000000",
-        priceChange24h: "+22.1",
-        trending: true,
-      },
-      {
-        address: "0x5678901234567890123456789012345678901234",
-        symbol: "BONK",
-        name: "Bonk",
-        price: "0.00002",
-        marketCap: "1200000000",
-        volume24h: "30000000",
-        priceChange24h: "+5.4",
-        trending: false,
-      },
-    ];
+    const memeCoins = await fetch(
+      "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=100&sortBy=rank&sortType=desc&cryptoType=all&tagType=all&audited=false&tagSlugs=memes&platformId=199&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap"
+    );
 
-    return memeCoins;
+    if (!memeCoins.ok) {
+      console.error("❌ Failed to fetch trending meme coins");
+      return tokens;
+    }
+
+    const data = await memeCoins.json();
+    const trendingCoins: MemeToken[] = data.data.cryptoCurrencyList;
+
+    return tokens;
   }
 
   async getAIDecision(
@@ -166,7 +160,7 @@ class TradingAgent {
 
     try {
       const results = streamText({
-        model: groq("llama-3.3-70b-versatile"),
+        model: groq("llama-3.1-8b-instant"),
         prompt,
         system: `You are an expert meme coin trading AI. You analyze market data and make trading decisions.
         
@@ -241,11 +235,17 @@ TRENDING MEME COINS:
 ${trendingCoins
   .map(
     (coin) => `
-- ${coin.symbol} (${coin.name}): $${coin.price}
-  24h Change: ${coin.priceChange24h}%
-  Market Cap: $${parseInt(coin.marketCap).toLocaleString()}
-  Volume: $${parseInt(coin.volume24h).toLocaleString()}
-  Trending: ${coin.trending ? "YES" : "NO"}
+- ${coin.symbol} (${coin.name}): $${coin.quotes[0].price} USD
+  Market Cap: $${coin.quotes[0].marketCap} USD
+  Volume (24h): $${coin.quotes[0].volume24h} USD
+  Circulating Supply: ${coin.circulatingSupply} ${coin.symbol}
+  ATH: $${coin.ath} USD, ATL: $${coin.atl} USD
+  Last Updated: ${coin.lastUpdated}
+  Badges: ${coin.badges.join(", ") || "None"}
+  Audit Info: ${coin.isAudited ? "Audited" : "Not Audited"}
+  Trading Pairs: ${coin.marketPairCount}
+  Trading Volume (7d): $${coin.quotes[0].volume7d} USD
+  Trading Volume (30d): $${coin.quotes[0].volume30d} USD
   Address: ${coin.address}
 `
   )
@@ -256,7 +256,7 @@ TRADING RULES:
 2. Consider selling positions with >50% gain (take profit)  
 3. Look for trending coins with high volume
 4. Don't use more than 30% of available cash per trade
-5. Maximum 5 positions at once
+5. Maximum 1 positions at once
 
 Make a trading decision: BUY a trending coin, SELL an existing position, or HOLD.
 `;
