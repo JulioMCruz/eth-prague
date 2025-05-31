@@ -1,58 +1,181 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
-import { useAccount } from "wagmi"
-import { usePathname } from "next/navigation"
-import { Button } from "./ui/button"
+import Image from "next/image";
+import Link from "next/link";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
 function Header() {
-    const { isConnected } = useAccount()
-    const pathname = usePathname()
-    
-    return (
-        <header className="py-5 px-4 sm:px-6 lg:px-8 border-b border-[#e9d7c1]">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2">
-            <Image src="/assets/kairos-orange.png" alt="Kairos logo icon" width={28} height={28} />
-            <span className="text-xl font-bold text-[#30261f]">kairos</span>
+  const { isConnected } = useAccount();
+  const pathname = usePathname();
+
+  return (
+    <header className="w-[90vw] mx-auto sticky top-0 z-20 flex justify-center pt-8">
+      <div className="backdrop-blur-xl bg-black/10 border border-white/20 rounded-full px-12 py-4 flex items-center justify-between w-full shadow-2xl">
+        <div className="flex items-center justify-between w-full">
+          <Link href={"/funds"} className="flex items-center space-x-3">
+            <Image
+              src="/assets/kairos.png"
+              alt="Kairos logo icon"
+              width={32}
+              height={32}
+              className="filter invert brightness-0"
+            />
+
+            <span className="text-xl font-bold text-white tracking-wide font-mono">
+              Kairos
+            </span>
           </Link>
-          <div className="flex items-center space-x-4">
+          <nav className="hidden md:flex items-center space-x-8">
             {!isConnected && (
-            <Link href="/funds" className="text-sm font-medium text-[#30261f]">All Funds</Link>
-            )}
-            {isConnected && (
-                <>
- {[
-              { name: "Portfolio", href: "/portfolio" },
-              { name: "Funds", href: "/funds" },
-            ].map((item) => (
               <Link
-                key={item.name}
-                href={item.href}
-                className={`text-xs sm:text-sm font-medium hover:text-[#f09630] transition-colors ${
-                  pathname === item.href
-                    ? "text-[#f09630]"
-                    : "text-[#7f664a]"
-                }`}
+                href="/funds"
+                className="text-white/90 hover:text-white transition-colors font-medium"
               >
-                {item.name}
+                Funds
               </Link>
-            ))}
-                  <Link href="/vault" className="text-xs sm:text-sm font-medium hover:text-[#f09630] transition-colors">
-                    <Button className="bg-[#c28446] text-white hover:bg-[#b0703c] rounded-lg text-xs px-3 py-1.5 sm:text-sm sm:px-4 sm:py-2 mx-2">
-                        Add Funds to Vault
-                    </Button>
-                  </Link>
-                </>
             )}
 
-            <ConnectButton />
+            {isConnected && (
+              <>
+                <Link
+                  href="/dashboard"
+                  className={`transition-colors font-medium ${
+                    pathname === "/dashboard"
+                      ? "text-white/90"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  Portfolio
+                </Link>
+                <Link
+                  href="/funds"
+                  className={`transition-colors font-medium ${
+                    pathname === "/funds"
+                      ? "text-white/90"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  Funds
+                </Link>
+                <Link
+                  href="/analytics"
+                  className={`transition-colors font-medium ${
+                    pathname === "/analytics"
+                      ? "text-white/90"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  Analytics
+                </Link>
+                <Link
+                  href="/rewards"
+                  className={`transition-colors font-medium ${
+                    pathname === "/rewards"
+                      ? "text-white/90"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  Rewards
+                </Link>
+              </>
+            )}
+          </nav>
+          <div className="flex items-center space-x-4">
+            {isConnected && (
+              <Link href="/vault">
+                <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium px-4 py-2 rounded-full text-sm transition-all duration-300 hover:scale-105">
+                  Add Funds to Vault
+                </Button>
+              </Link>
+            )}
+
+            <ConnectButton.Custom>
+              {({
+                account,
+                chain,
+                openAccountModal,
+                openChainModal,
+                openConnectModal,
+                authenticationStatus,
+                mounted,
+              }) => {
+                const ready = mounted && authenticationStatus !== "loading";
+                const connected =
+                  ready &&
+                  account &&
+                  chain &&
+                  (!authenticationStatus ||
+                    authenticationStatus === "authenticated");
+
+                return (
+                  <div
+                    {...(!ready && {
+                      "aria-hidden": true,
+                      style: {
+                        opacity: 0,
+                        pointerEvents: "none",
+                        userSelect: "none",
+                      },
+                    })}
+                  >
+                    {(() => {
+                      if (!connected) {
+                        return (
+                          <button
+                            onClick={openConnectModal}
+                            type="button"
+                            className="px-4 py-2 border rounded-full text-white text-sm font-medium hover:bg-white/10 transition-all duration-300"
+                            style={{
+                              background: "rgba(147, 51, 234, 0.2)",
+                              borderColor: "rgba(147, 51, 234, 0.5)",
+                            }}
+                          >
+                            Connect Wallet
+                          </button>
+                        );
+                      }
+
+                      if (chain.unsupported) {
+                        return (
+                          <button
+                            onClick={openChainModal}
+                            type="button"
+                            className="px-4 py-2 border rounded-full text-red-400 text-sm font-medium"
+                            style={{
+                              background: "rgba(239, 68, 68, 0.2)",
+                              borderColor: "rgba(239, 68, 68, 0.5)",
+                            }}
+                          >
+                            Wrong network
+                          </button>
+                        );
+                      }
+
+                      return (
+                        <div
+                          className="px-4 py-2 border rounded-full text-white text-sm font-medium cursor-pointer hover:bg-white/10 transition-all duration-300"
+                          style={{
+                            background: "rgba(147, 51, 234, 0.2)",
+                            borderColor: "rgba(147, 51, 234, 0.5)",
+                          }}
+                          onClick={openAccountModal}
+                        >
+                          {account.displayName}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                );
+              }}
+            </ConnectButton.Custom>
           </div>
         </div>
-      </header>
-    )
+      </div>
+    </header>
+  );
 }
 
 export default Header;

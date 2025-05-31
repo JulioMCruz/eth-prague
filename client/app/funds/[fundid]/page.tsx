@@ -1,436 +1,514 @@
-"use client" 
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft } from "lucide-react"
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from "recharts"
-import { useState, use } from "react"
-import Header from "@/components/header"
-
-interface Tag {
-  label: string
-  type: string
-}
-
-interface ChartDataItem {
-  name: string
-  value: number
-}
-
-interface ActivityItemData {
-  text: string
-  time: string
-}
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  ChevronLeft,
+  Bot,
+  TrendingUp,
+  TrendingDown,
+  Users,
+  Star,
+} from "lucide-react";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
+import { useState, use } from "react";
+import Header from "@/components/header";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface Fund {
-  id: string
-  name: string
-  description: string
-  imageUrl: string
-  tags: Tag[]
-  category?: string
-  longDescription?: string
-  performancePercent?: number
-  apy?: string
-  riskRating?: string
-  mode?: string
-  strategy?: string
-  chartData?: ChartDataItem[]
-  recentActivity?: ActivityItemData[]
+  id: string;
+  name: string;
+  description: string;
+  apy: string;
+  tvl: string;
+  risk: string;
+  manager: string;
+  performance: string;
+  investors: number;
+  image: string;
+  longDescription?: string;
+  chartData?: Array<{ name: string; value: number }>;
+  trades?: Array<{
+    action: "Buy" | "Sell";
+    tokenName: string;
+    tokenAmount: string;
+    timeframe: string;
+    timestamp: string;
+  }>;
 }
 
+// Updated funds data to match your main page structure
 const allFundsData: { [key: string]: Fund[] } = {
-  trending: [
+  aiOnChain: [
     {
-      id: "tf1",
-      name: "Meme Momentum Fund",
-      description: "Realtime sentiment based memecoin allocation.",
-      imageUrl: "/data/crypto-art-mashup.png",
-      tags: [
-        { label: "AI managed", type: "type_light_bg" },
-        { label: "+12.8%", type: "performance_dark_bg" },
-      ],
-      category: "Trending",
+      id: "ai-1",
+      name: "Viral Meme Hunter",
+      description:
+        "AI tracks social sentiment and trades viral meme tokens across all chains with 85% accuracy rate.",
+      apy: "+127.3%",
+      tvl: "$2.4M",
+      risk: "High",
+      manager: "Neural Alpha AI",
+      performance: "+45.2%",
+      investors: 1247,
+      image: "/images/funds/meme-hunter.jpg",
       longDescription:
-        "Detects trending memecoins across Base, Solana, and Ethereum using real-time volume, social sentiment, and momentum signals. Capital is reallocated dynamically to maximise short-term spikes while minimising drawdown.",
-      performancePercent: 12.8,
-      apy: "12.8%",
-      riskRating: "High",
-      mode: "AI managed",
-      strategy: "Rebalances every 2h based on trends",
+        "Advanced AI system that monitors social media sentiment, trading volume, and momentum indicators across multiple blockchain networks. Our neural network processes over 10,000 data points per minute to identify viral meme tokens before they peak, executing trades with millisecond precision to capture maximum gains while minimizing downside risk.",
       chartData: [
         { name: "Jan", value: 3000 },
-        { name: "Feb", value: 3200 },
-        { name: "Mar", value: 2800 },
-        { name: "Apr", value: 3500 },
-        { name: "May", value: 4000 },
-        { name: "Jun", value: 4500 },
-        { name: "Jul", value: 4200 },
+        { name: "Feb", value: 3500 },
+        { name: "Mar", value: 4200 },
+        { name: "Apr", value: 5800 },
+        { name: "May", value: 6400 },
+        { name: "Jun", value: 7200 },
       ],
-      recentActivity: [
-        { text: "Allocated 500 $FUND to SOL-WIF pool", time: "5 min ago" },
-        { text: "Swapped 200 USDC → PONKE on Base", time: "1 hr ago" },
-        { text: "Exited 150 PEPE position", time: "3 hrs ago" },
-        { text: "Increased BONK exposure by 20%", time: "5 hrs ago" },
+      trades: [
+        {
+          action: "Buy",
+          tokenName: "PEPE",
+          tokenAmount: "1,250,000",
+          timeframe: "2m",
+          timestamp: "2 min ago",
+        },
+        {
+          action: "Sell",
+          tokenName: "DOGE",
+          tokenAmount: "45,000",
+          timeframe: "15m",
+          timestamp: "8 min ago",
+        },
+        {
+          action: "Buy",
+          tokenName: "SHIB",
+          tokenAmount: "2,100,000",
+          timeframe: "5m",
+          timestamp: "12 min ago",
+        },
+        {
+          action: "Sell",
+          tokenName: "BONK",
+          tokenAmount: "850,000",
+          timeframe: "30m",
+          timestamp: "25 min ago",
+        },
+        {
+          action: "Buy",
+          tokenName: "WIF",
+          tokenAmount: "15,500",
+          timeframe: "1h",
+          timestamp: "45 min ago",
+        },
       ],
     },
     {
-      id: "tf2",
-      name: "Stable Momentum Fund",
-      description: "Stablecoin farming with periodic momentum-based reallocation.",
-      imageUrl: "/data/abstract-stablecoin-growth.png",
-      tags: [
-        { label: "Hybrid strategy", type: "type_light_bg" },
-        { label: "+5%", type: "performance_dark_bg" },
+      id: "ai-2",
+      name: "Cross-Chain Arbitrage Pro",
+      description:
+        "AI captures price differences and cross-chain opportunities with millisecond execution.",
+      apy: "+89.7%",
+      tvl: "$12.8M",
+      risk: "Medium",
+      manager: "ArbiBot Systems",
+      performance: "+23.1%",
+      investors: 892,
+      image: "/images/funds/arbitrage-pro.jpg",
+      longDescription:
+        "Sophisticated arbitrage algorithm that identifies and exploits price differences across 15+ blockchain networks including Ethereum, BSC, Polygon, Arbitrum, and Solana. The system executes flash loans and cross-chain swaps automatically to capture risk-free profits from market inefficiencies.",
+      chartData: [
+        { name: "Jan", value: 5000 },
+        { name: "Feb", value: 5200 },
+        { name: "Mar", value: 5800 },
+        { name: "Apr", value: 6100 },
+        { name: "May", value: 6350 },
+        { name: "Jun", value: 6600 },
       ],
-      category: "Trending",
-      longDescription: "Aims for steady growth with managed risk.",
-      performancePercent: 5.0,
-      apy: "5.0%",
-      riskRating: "Medium",
-      mode: "Hybrid strategy",
-      strategy: "Quarterly rebalance.",
+      trades: [
+        {
+          action: "Buy",
+          tokenName: "ETH",
+          tokenAmount: "2.5",
+          timeframe: "1m",
+          timestamp: "30 sec ago",
+        },
+        {
+          action: "Sell",
+          tokenName: "ETH",
+          tokenAmount: "2.5",
+          timeframe: "1m",
+          timestamp: "45 sec ago",
+        },
+        {
+          action: "Buy",
+          tokenName: "USDC",
+          tokenAmount: "10,000",
+          timeframe: "2m",
+          timestamp: "3 min ago",
+        },
+        {
+          action: "Sell",
+          tokenName: "USDT",
+          tokenAmount: "10,000",
+          timeframe: "2m",
+          timestamp: "3 min ago",
+        },
+      ],
     },
     {
-      id: "tf3",
-      name: "EcoFi Fund",
-      description: "Focused on regenerative finance, and impact-oriented protocols.",
-      imageUrl: "/data/abstract-sunset-eco-finance.png",
-      tags: [
-        { label: "Human Manager", type: "type_light_bg" },
-        { label: "+8%", type: "performance_dark_bg" },
+      id: "ai-3",
+      name: "DeFi Blue Chip Optimizer",
+      description:
+        "AI allocates to established protocols like Uniswap, Aave, Compound with smart rebalancing.",
+      apy: "+34.5%",
+      tvl: "$45.2M",
+      risk: "Low",
+      manager: "Stability AI Fund",
+      performance: "+18.7%",
+      investors: 2156,
+      image: "/images/funds/blue-chip.jpg",
+      longDescription:
+        "Conservative AI strategy focused on established DeFi protocols with proven track records. The algorithm continuously monitors yield opportunities, protocol health metrics, and risk factors to optimize allocation across blue-chip DeFi assets while maintaining capital preservation as the primary objective.",
+      chartData: [
+        { name: "Jan", value: 8000 },
+        { name: "Feb", value: 8150 },
+        { name: "Mar", value: 8300 },
+        { name: "Apr", value: 8500 },
+        { name: "May", value: 8750 },
+        { name: "Jun", value: 9000 },
       ],
-      category: "Trending",
-      longDescription: "Supports sustainable blockchain initiatives.",
-      performancePercent: 8.0,
-      apy: "8.0%",
-      riskRating: "Medium-Low",
-      mode: "Human Manager",
-      strategy: "Long-term holding.",
+      trades: [
+        {
+          action: "Buy",
+          tokenName: "UNI",
+          tokenAmount: "500",
+          timeframe: "4h",
+          timestamp: "2 hrs ago",
+        },
+        {
+          action: "Sell",
+          tokenName: "COMP",
+          tokenAmount: "25",
+          timeframe: "6h",
+          timestamp: "4 hrs ago",
+        },
+        {
+          action: "Buy",
+          tokenName: "AAVE",
+          tokenAmount: "150",
+          timeframe: "12h",
+          timestamp: "8 hrs ago",
+        },
+      ],
     },
   ],
-  aiManaged: [
-    {
-      id: "ai1",
-      name: "Narrative Radar Fund",
-      description: "Detects and rides early trends from social signals.",
-      imageUrl: "/data/abstract-data-waves-social-signals.png",
-      tags: [
-        { label: "AI managed", type: "type_light_bg" },
-        { label: "+15.2%", type: "performance_dark_bg" },
-      ],
-      category: "AI Managed",
-      longDescription: "AI-driven narrative strength scores.",
-      performancePercent: 15.2,
-      apy: "15.2%",
-      riskRating: "High",
-      mode: "AI managed",
-      strategy: "Dynamic allocation.",
-    },
-    {
-      id: "ai2",
-      name: "Cross-Chain Arbitrage Fund",
-      description: "Exploits inefficiencies and price gaps across networks.",
-      imageUrl: "/data/glowing-network.png",
-      tags: [
-        { label: "AI managed", type: "type_light_bg" },
-        { label: "+18%", type: "performance_dark_bg" },
-      ],
-      category: "AI Managed",
-      longDescription: "High-frequency arbitrage trades.",
-      performancePercent: 18.0,
-      apy: "18.0%",
-      riskRating: "Medium",
-      mode: "AI managed",
-      strategy: "AI bot execution.",
-    },
-    {
-      id: "ai3",
-      name: "Yield Pulse Fund",
-      description: "Rotates capital to the highest APY farms across chains in real time.",
-      imageUrl: "/data/dynamic-yield-pulse.png",
-      tags: [
-        { label: "AI managed", type: "type_light_bg" },
-        { label: "+11%", type: "performance_dark_bg" },
-      ],
-      category: "AI Managed",
-      longDescription: "Continuous APY monitoring.",
-      performancePercent: 11.0,
-      apy: "11.0%",
-      riskRating: "Medium-High",
-      mode: "AI managed",
-      strategy: "Automated rotation.",
-    },
-  ],
-  hybridManaged: [
-    {
-      id: "hy1",
-      name: "Stable Momentum Fund",
-      description: "Stablecoin farming with periodic momentum-based reallocation.",
-      imageUrl: "/data/stable-hybrid-momentum-fund.png",
-      tags: [
-        { label: "Hybrid strategy", type: "type_light_bg" },
-        { label: "+7%", type: "performance_dark_bg" },
-      ],
-      category: "Hybrid Managed",
-      longDescription: "Human oversight validates AI signals.",
-      performancePercent: 7.0,
-      apy: "7.0%",
-      riskRating: "Medium",
-      mode: "Hybrid strategy",
-      strategy: "AI-suggested reallocations.",
-    },
-    {
-      id: "hy2",
-      name: "DeFi Alpha Fund",
-      description: "Maximize returns with alpha strategies.",
-      imageUrl: "/data/defi-alpha-hybrid-fund.png",
-      tags: [
-        { label: "Hybrid strategy", type: "type_light_bg" },
-        { label: "+21.8%", type: "performance_dark_bg" },
-      ],
-      category: "Hybrid Managed",
-      longDescription: "Blend of AI models and human trading.",
-      performancePercent: 21.8,
-      apy: "21.8%",
-      riskRating: "High",
-      mode: "Hybrid strategy",
-      strategy: "AI quant + human discretion.",
-    },
-  ],
-  humanManaged: [
-    {
-      id: "hm1",
-      name: "Real World Yield Fund",
-      description: "Focuses on tokenised RWAs like bonds, invoices, and real estate.",
-      imageUrl: "/data/rwa-yield-fund-building.png",
-      tags: [
-        { label: "Human Manager", type: "type_light_bg" },
-        { label: "+6%", type: "performance_dark_bg" },
-      ],
-      category: "Human Managed",
-      longDescription: "Diversified RWA portfolio.",
-      performancePercent: 6.0,
-      apy: "6.0%",
-      riskRating: "Low-Medium",
-      mode: "Human Manager",
-      strategy: "Active RWA management.",
-    },
-    {
-      id: "hm2",
-      name: "EcoFi Fund",
-      description: "Focused on regenerative finance, and impact-oriented protocols.",
-      imageUrl: "/data/eco-finance-human-managed.png",
-      tags: [
-        { label: "Human Manager", type: "type_light_bg" },
-        { label: "+5%", type: "performance_dark_bg" },
-      ],
-      category: "Human Managed",
-      longDescription: "Curated impact-driven assets.",
-      performancePercent: 5.0,
-      apy: "5.0%",
-      riskRating: "Medium-Low",
-      mode: "Human Manager",
-      strategy: "Impact-vetted portfolio.",
-    },
-  ],
-}
+  // Add other categories as needed...
+};
 
 const findFundById = (fundId: string): Fund | undefined => {
   for (const categoryKey in allFundsData) {
-    const categoryFunds = allFundsData[categoryKey as keyof typeof allFundsData]
-    const fund = categoryFunds.find((f) => f.id === fundId)
-    if (fund) return fund
+    const categoryFunds =
+      allFundsData[categoryKey as keyof typeof allFundsData];
+    const fund = categoryFunds.find((f) => f.id === fundId);
+    if (fund) return fund;
   }
-  return undefined
-}
+  return undefined;
+};
 
-function ActivityItemDisplay({ text, time }: ActivityItemData) {
-  return (
-    <div className="bg-[#fff9ef] p-3 rounded-lg flex justify-between items-center border border-[#e9d7c1]">
-      <p className="text-sm text-[#30261f]">{text}</p>
-      <p className="text-xs text-[#7f664a] whitespace-nowrap">{time}</p>
-    </div>
-  )
-}
-
-function RecentActivitySection({ activities }: { activities?: ActivityItemData[] }) {
-  if (!activities || activities.length === 0) {
-    return (
-      <div>
-        <h2 className="text-xl font-bold text-[#30261f] mb-4">Recent Activity</h2>
-        <p className="text-sm text-[#7f664a]">No recent activity available for this fund.</p>
-      </div>
-    )
+const getRiskColor = (risk: string) => {
+  switch (risk) {
+    case "Low":
+      return "text-green-400 bg-green-500/20";
+    case "Medium":
+      return "text-yellow-400 bg-yellow-500/20";
+    case "High":
+      return "text-red-400 bg-red-500/20";
+    default:
+      return "text-gray-400 bg-gray-500/20";
   }
-  return (
-    <div>
-      <h2 className="text-xl font-bold text-[#30261f] mb-4">Recent Activity</h2>
-      <div className="space-y-3">
-        {activities.map((activity, index) => (
-          <ActivityItemDisplay key={index} text={activity.text} time={activity.time} />
-        ))}
-      </div>
-    </div>
-  )
-}
+};
 
-export default function FundDetailPage({ params }: { params: Promise<{ fundid: string }> }) {
-  const resolvedParams = use(params)
-  const fund = findFundById(resolvedParams.fundid)
-  const [selectedTimeframe, setSelectedTimeframe] = useState("7d")
+export default function FundDetailPage({
+  params,
+}: {
+  params: Promise<{ fundid: string }>;
+}) {
+  const resolvedParams = use(params);
+  const fund = findFundById(resolvedParams.fundid);
+  const [selectedTimeframe, setSelectedTimeframe] = useState("7d");
 
   if (!fund) {
     return (
-      <div className="min-h-screen bg-[#f3ebd5] text-[#30261f]">
+      <div className="min-h-screen" style={{ backgroundColor: "#1B1B3A" }}>
         <Header />
-        <div className="min-h-screen bg-[#f3ebd5] flex flex-col items-center justify-center p-4 text-center">
-          <h1 className="text-3xl font-bold text-[#30261f] mb-3">Fund Not Found</h1>
-          <p className="text-[#7f664a] mb-6">
-            The fund you are looking for (ID: {resolvedParams.fundid}) does not exist or data is unavailable.
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
+          <h1 className="text-3xl font-bold text-white mb-3">Fund Not Found</h1>
+          <p className="text-white/70 mb-6">
+            The fund you are looking for (ID: {resolvedParams.fundid}) does not
+            exist.
           </p>
           <Link href="/funds">
-            <Button className="bg-[#f09630] text-black hover:bg-orange-500 rounded-lg px-6 py-2">
+            <Button className="bg-[#F3F4F6] text-[#1B1B3A] hover:bg-[#F3F4F6]/90 rounded-lg px-6 py-2">
               Back to All Funds
             </Button>
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="min-h-screen bg-[#f3ebd5] text-[#30261f]">
+    <div className="min-h-screen" style={{ backgroundColor: "#1B1B3A" }}>
       <Header />
 
-      <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8 max-w-5xl">
+      <main className="max-w-7xl mx-auto px-6 py-8">
         <Link
           href="/funds"
-          className="inline-flex items-center text-sm text-[#aa6325] hover:text-[#c28446] mb-6 group"
+          className="inline-flex items-center text-sm text-[#F3F4F6]/70 hover:text-[#F3F4F6] mb-8 group"
         >
-          <ChevronLeft size={18} className="mr-1 group-hover:-translate-x-0.5 transition-transform" />
-          Back to All
+          <ChevronLeft
+            size={18}
+            className="mr-1 group-hover:-translate-x-0.5 transition-transform"
+          />
+          Back to All Funds
         </Link>
 
-        <div className="relative h-64 rounded-xl overflow-hidden shadow-lg mb-8">
-          <Image
-            src={fund.imageUrl || "/placeholder.svg?width=1200&height=300&query=fund+visual"}
-            alt={fund.name}
-            layout="fill"
-            objectFit="cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-6 flex flex-col justify-end">
-            <h1 className="text-3xl font-bold text-white shadow-black [text-shadow:_0_2px_4px_rgb(0_0_0_/_0.8)]">
-              {fund.name}
-            </h1>
-          </div>
-        </div>
+        {/* Fund Header */}
+        <div className="bg-black/20 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden mb-8">
+          {/* Image Section */}
+          <div className="relative h-64 overflow-hidden">
+            <img
+              src={fund.image}
+              alt={fund.name}
+              className="w-full h-full object-cover"
+            />
+            <div
+              className="w-full h-full bg-gradient-to-br from-[#1B1B3A] to-[#F3F4F6]/20 hidden absolute inset-0"
+              style={{ display: "none" }}
+            />
 
-        <p className="text-base text-[#30261f] mb-8 leading-relaxed">
-          {fund.longDescription || fund.description || "No detailed description available."}
-        </p>
-
-        <div className="bg-white rounded-xl p-6 mb-8 shadow-sm">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <p className="text-sm text-[#7f664a] mb-1">Performance</p>
-              <p className="text-3xl font-bold text-[#30261f]">
-                {fund.performancePercent !== undefined ? `${fund.performancePercent >= 0 ? "+" : ""}${fund.performancePercent}%` : "N/A"}
-              </p>
+            {/* Badges */}
+            <div className="absolute top-4 right-4 flex flex-col gap-2">
+              {(fund.id.startsWith("ai-") || fund.id.startsWith("hybrid-")) && (
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/80 text-white backdrop-blur-sm flex items-center gap-1">
+                  <Bot className="w-3 h-3" />
+                  AI Managed
+                </span>
+              )}
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-bold ${getRiskColor(
+                  fund.risk
+                )}`}
+              >
+                {fund.risk} Risk
+              </span>
             </div>
-            <div className="flex gap-2">
-              {["24h", "7d", "30d", "All"].map((period) => (
-                <button
-                  key={period}
-                  onClick={() => setSelectedTimeframe(period)}
-                  className={`px-3 py-1 text-sm rounded-full transition-colors ${
-                    selectedTimeframe === period
-                      ? "bg-[#f09630] text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+
+            {/* Title Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent p-6 flex flex-col justify-end">
+              <h1 className="text-4xl font-bold text-white mb-2">
+                {fund.name}
+              </h1>
+              <div className="flex items-center space-x-3 text-white/80">
+                <span>{fund.manager}</span>
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              </div>
+            </div>
+          </div>
+
+          {/* Content Section */}
+          <div className="p-6">
+            <p className="text-white/70 text-lg mb-6 leading-relaxed">
+              {fund.longDescription || fund.description}
+            </p>
+
+            {/* Key Metrics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div>
+                <p className="text-white/60 text-sm mb-1">APY</p>
+                <p className="text-green-400 font-bold text-2xl">{fund.apy}</p>
+              </div>
+              <div>
+                <p className="text-white/60 text-sm mb-1">TVL</p>
+                <p className="text-white font-bold text-2xl">{fund.tvl}</p>
+              </div>
+              <div>
+                <p className="text-white/60 text-sm mb-1">24h Performance</p>
+                <p
+                  className={`font-bold text-xl flex items-center space-x-1 ${
+                    fund.performance.startsWith("+")
+                      ? "text-green-400"
+                      : "text-red-400"
                   }`}
                 >
-                  {period}
-                </button>
-              ))}
+                  {fund.performance.startsWith("+") ? (
+                    <TrendingUp className="w-5 h-5" />
+                  ) : (
+                    <TrendingDown className="w-5 h-5" />
+                  )}
+                  <span>{fund.performance}</span>
+                </p>
+              </div>
+              <div>
+                <p className="text-white/60 text-sm mb-1">Investors</p>
+                <p className="text-white font-bold text-xl flex items-center space-x-1">
+                  <Users className="w-5 h-5" />
+                  <span>{fund.investors.toLocaleString()}</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4">
+              <Button className="bg-[#F3F4F6] text-[#1B1B3A] hover:bg-[#F3F4F6]/90 px-8 py-3 text-lg font-bold">
+                Invest Now
+              </Button>
+              <Button
+                variant="outline"
+                className="border-white/30 text-white hover:bg-white/10 px-8 py-3 text-lg"
+              >
+                Withdraw
+              </Button>
             </div>
           </div>
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={fund.chartData || []} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
-              <defs>
-                <linearGradient id={`chartColor-${fund.id}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#f09630" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#f09630" stopOpacity={0.1} />
-                </linearGradient>
-              </defs>
-              <XAxis
-                dataKey="name"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fontSize: 10, fill: "#7f664a" }}
-              />
-              <YAxis hide={true} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "rgba(255, 255, 255, 0.95)",
-                  border: "1px solid #e9d7c1",
-                  borderRadius: "0.5rem",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                }}
-                itemStyle={{ color: "#30261f" }}
-                labelStyle={{ color: "#7f664a", fontSize: "0.75rem" }}
-                formatter={(value: number) => [`$${value.toLocaleString()}`, "Value"]}
-              />
-              <Area
-                type="monotone"
-                dataKey="value"
-                stroke="#f09630"
-                strokeWidth={2}
-                fillOpacity={1}
-                fill={`url(#chartColor-${fund.id})`}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg p-4">
-            <p className="text-xs text-[#7f664a] mb-1">APY</p>
-            <p className="text-lg font-semibold text-[#30261f]">{fund.apy || "N/A"}</p>
+        {/* Performance Chart */}
+        {fund.chartData && (
+          <div className="bg-black/20 backdrop-blur-sm border border-white/20 rounded-xl p-6 mb-8">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-white">
+                Performance Chart
+              </h2>
+              <div className="flex gap-2">
+                {["24h", "7d", "30d", "All"].map((period) => (
+                  <button
+                    key={period}
+                    onClick={() => setSelectedTimeframe(period)}
+                    className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+                      selectedTimeframe === period
+                        ? "bg-[#F3F4F6] text-[#1B1B3A]"
+                        : "bg-white/10 text-white/70 hover:bg-white/20"
+                    }`}
+                  >
+                    {period}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart
+                data={fund.chartData}
+                margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+              >
+                <defs>
+                  <linearGradient
+                    id={`chartColor-${fund.id}`}
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#F3F4F6" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#F3F4F6" stopOpacity={0.1} />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="name"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 12, fill: "#F3F4F6" }}
+                />
+                <YAxis hide={true} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    borderRadius: "0.5rem",
+                    color: "#F3F4F6",
+                  }}
+                  formatter={(value: number) => [
+                    `$${value.toLocaleString()}`,
+                    "Value",
+                  ]}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#F3F4F6"
+                  strokeWidth={2}
+                  fillOpacity={1}
+                  fill={`url(#chartColor-${fund.id})`}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
-          <div className="bg-white rounded-lg p-4">
-            <p className="text-xs text-[#7f664a] mb-1">Risk Rating</p>
-            <p className="text-lg font-semibold text-[#30261f]">{fund.riskRating || "N/A"}</p>
-          </div>
-          <div className="bg-white rounded-lg p-4">
-            <p className="text-xs text-[#7f664a] mb-1">Mode</p>
-            <p className="text-lg font-semibold text-[#30261f]">{fund.mode || "N/A"}</p>
-          </div>
-          <div className="bg-white rounded-lg p-4">
-            <p className="text-xs text-[#7f664a] mb-1">Strategy</p>
-            <p className="text-sm font-medium text-[#30261f] leading-tight">{fund.strategy || "N/A"}</p>
-          </div>
-        </div>
+        )}
 
-        <div className="flex gap-4 mb-10">
-          <Button
-            size="lg"
-            className="bg-[#c28446] text-white hover:bg-[#b0703c] px-8 py-3 rounded-lg text-base font-semibold"
-          >
-            Fund
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="bg-[#f9e8c9] border-[#c28446] text-[#c28446] hover:bg-[#f0ddb8] px-8 py-3 rounded-lg text-base font-semibold"
-          >
-            Withdraw
-          </Button>
-        </div>
-
-        <RecentActivitySection activities={fund.recentActivity} />
+        {/* Trading Activity Table */}
+        {fund.trades && (
+          <div className="bg-black/20 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+            <h2 className="text-2xl font-bold text-white mb-6">
+              Recent Trading Activity
+            </h2>
+            <Table>
+              <TableHeader>
+                <TableRow className="border-white/20">
+                  <TableHead className="text-white/70">Action</TableHead>
+                  <TableHead className="text-white/70">Token</TableHead>
+                  <TableHead className="text-white/70">Amount</TableHead>
+                  <TableHead className="text-white/70">Timeframe</TableHead>
+                  <TableHead className="text-white/70">Time</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {fund.trades.map((trade, index) => (
+                  <TableRow
+                    key={index}
+                    className="border-white/10 hover:bg-white/5"
+                  >
+                    <TableCell>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          trade.action === "Buy"
+                            ? "bg-green-500/20 text-green-400"
+                            : "bg-red-500/20 text-red-400"
+                        }`}
+                      >
+                        {trade.action}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-white font-medium">
+                      {trade.tokenName}
+                    </TableCell>
+                    <TableCell className="text-white/80">
+                      {trade.tokenAmount}
+                    </TableCell>
+                    <TableCell className="text-white/80">
+                      {trade.timeframe}
+                    </TableCell>
+                    <TableCell className="text-white/60 text-sm">
+                      {trade.timestamp}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </main>
     </div>
-  )
+  );
 }

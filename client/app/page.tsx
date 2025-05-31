@@ -28,13 +28,13 @@ export default function Home() {
               height={32}
               className="filter invert brightness-0"
             />
-            <span className="ml-3 text-xl font-bold text-white tracking-wide">
-              kairos
+            <span className="ml-3 text-xl font-bold text-white tracking-wide font-mono">
+              Kairos
             </span>
           </div>
 
           <Link
-            href="/portfolio"
+            href="/funds"
             className="px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-purple-500/50 text-sm"
           >
             Launch dApp
