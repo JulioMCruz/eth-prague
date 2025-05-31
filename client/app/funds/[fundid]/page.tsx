@@ -65,7 +65,7 @@ const allFundsData: { [key: string]: Fund[] } = {
       manager: "Neural Alpha AI",
       performance: "+45.2%",
       investors: 1247,
-      image: "/images/funds/meme-hunter.jpg",
+      image: "/data/c1_meme-fund.jpg",
       longDescription:
         "Advanced AI system that monitors social media sentiment, trading volume, and momentum indicators across multiple blockchain networks. Our neural network processes over 10,000 data points per minute to identify viral meme tokens before they peak, executing trades with millisecond precision to capture maximum gains while minimizing downside risk.",
       chartData: [
@@ -125,7 +125,7 @@ const allFundsData: { [key: string]: Fund[] } = {
       manager: "ArbiBot Systems",
       performance: "+23.1%",
       investors: 892,
-      image: "/images/funds/arbitrage-pro.jpg",
+      image: "/data/c1_arbitrage.jpg",
       longDescription:
         "Sophisticated arbitrage algorithm that identifies and exploits price differences across 15+ blockchain networks including Ethereum, BSC, Polygon, Arbitrum, and Solana. The system executes flash loans and cross-chain swaps automatically to capture risk-free profits from market inefficiencies.",
       chartData: [
@@ -178,7 +178,7 @@ const allFundsData: { [key: string]: Fund[] } = {
       manager: "Stability AI Fund",
       performance: "+18.7%",
       investors: 2156,
-      image: "/images/funds/blue-chip.jpg",
+      image: "/data/c1_blue-chip.jpg",
       longDescription:
         "Conservative AI strategy focused on established DeFi protocols with proven track records. The algorithm continuously monitors yield opportunities, protocol health metrics, and risk factors to optimize allocation across blue-chip DeFi assets while maintaining capital preservation as the primary objective.",
       chartData: [

@@ -21,7 +21,7 @@ const FundsPage = () => {
         manager: "Neural Alpha AI",
         performance: "+45.2%",
         investors: 1247,
-        image: "/images/funds/meme-hunter.jpg", // Add your image path
+        image: "/data/c1_meme-fund.jpg", // Add your image path
       },
       {
         id: "ai-2",
@@ -34,7 +34,7 @@ const FundsPage = () => {
         manager: "ArbiBot Systems",
         performance: "+23.1%",
         investors: 892,
-        image: "/images/funds/arbitrage-pro.jpg",
+        image: "/data/c1_arbitrage.jpg",
       },
       {
         id: "ai-3",
@@ -47,7 +47,7 @@ const FundsPage = () => {
         manager: "Stability AI Fund",
         performance: "+18.7%",
         investors: 2156,
-        image: "/images/funds/blue-chip.jpg",
+        image: "/data/c1_blue-chip.jpg",
       },
     ],
     aiHybrid: [
@@ -62,7 +62,7 @@ const FundsPage = () => {
         manager: "RWA Intelligence",
         performance: "+31.4%",
         investors: 743,
-        image: "/images/funds/real-estate.jpg",
+        image: "/data/c2_RWA.jpg",
       },
       {
         id: "hybrid-2",
@@ -75,7 +75,7 @@ const FundsPage = () => {
         manager: "EventFlow AI",
         performance: "+52.3%",
         investors: 456,
-        image: "/images/funds/news-trader.jpg",
+        image: "/data/c2_news.jpg",
       },
       {
         id: "hybrid-3",
@@ -88,13 +88,13 @@ const FundsPage = () => {
         manager: "Bridge Capital AI",
         performance: "+29.8%",
         investors: 1829,
-        image: "/images/funds/bridge-capital.jpg",
+        image: "/data/c2_cross-market.jpg",
       },
     ],
     humanManaged: [
       {
         id: "human-1",
-        name: "Crypto Alpha Masters",
+        name: "Professional Manager Fund",
         description:
           "Professional fund manager with 8+ years experience and verified track record.",
         apy: "+156.7%",
@@ -103,11 +103,11 @@ const FundsPage = () => {
         manager: "Marcus Chen",
         performance: "+67.9%",
         investors: 3421,
-        image: "/images/funds/alpha-masters.jpg",
+        image: "/data/c3_professional.jpg",
       },
       {
         id: "human-2",
-        name: "Community DeFi Strategy",
+        name: "Community Strategy Funds",
         description:
           "Top-performing community member shares copyable investment strategies.",
         apy: "+91.4%",
@@ -116,11 +116,11 @@ const FundsPage = () => {
         manager: "DegenKing.eth",
         performance: "+38.6%",
         investors: 987,
-        image: "/images/funds/community-defi.jpg",
+        image: "/data/c3_community.jpg",
       },
       {
         id: "human-3",
-        name: "Institutional Hedge Alpha",
+        name: "Institutional Hedge Funds",
         description:
           "Verified hedge fund offers proven institutional trading strategies.",
         apy: "+73.2%",
@@ -129,7 +129,7 @@ const FundsPage = () => {
         manager: "Quantum Capital",
         performance: "+41.3%",
         investors: 5632,
-        image: "/images/funds/institutional.jpg",
+        image: "/data/c3_institutional.png",
       },
     ],
   };
@@ -280,7 +280,7 @@ const FundCard = ({
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={"/data/strategy-ai-1.png"}
+          src={fund.image}
           alt={fund.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />

@@ -77,28 +77,34 @@ const VaultPage = () => {
         {/* Vault Balance Card */}
         <div className="bg-black/20 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden mb-8">
           {/* Vault Visual */}
-          <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="relative">
-                <Vault className="w-32 h-32 text-[#F3F4F6] opacity-20" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-5xl font-bold text-white mb-2">
-                      ${vaultBalance.toLocaleString()}
-                    </div>
-                    <div className="flex items-center justify-center space-x-2 text-green-400">
-                      <TrendingUp className="w-5 h-5" />
-                      <span className="text-lg font-semibold">
-                        {monthlyGain}
-                      </span>
-                    </div>
-                  </div>
+          <div className="relative h-64 overflow-hidden">
+            {/* Vault image as full background */}
+            <img 
+              src="/assets/vault.png" 
+              alt="Vault" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            
+            {/* Dark overlay for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-900/70 to-gray-900/50" />
+            
+            {/* Content overlay */}
+            <div className="relative z-10 h-full flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-5xl font-bold text-white mb-2">
+                  ${vaultBalance.toLocaleString()}
+                </div>
+                <div className="flex items-center justify-center space-x-2 text-green-400">
+                  <TrendingUp className="w-5 h-5" />
+                  <span className="text-lg font-semibold">
+                    {monthlyGain}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Security Badge */}
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4 z-10">
               <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-500/80 text-white backdrop-blur-sm flex items-center gap-1">
                 <Shield className="w-3 h-3" />
                 Secured
