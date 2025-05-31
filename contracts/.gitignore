@@ -1,0 +1,37 @@
+# Node modules
+node_modules/
+
+# Hardhat/Foundry artifacts
+artifacts/
+cache/
+out/
+broadcast/
+
+# Environment variables
+.env
+.env.*
+
+# Coverage
+coverage/
+coverage.json
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# Yarn/PNPM lock files (if not used)
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
