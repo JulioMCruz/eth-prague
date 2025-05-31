@@ -43,8 +43,8 @@ export default function RootLayout({
             <RainbowKitProvider 
             modalSize="compact"
             theme={lightTheme({
-              accentColor: '#f09630',
-              accentColorForeground: 'black',
+              accentColor: '#c28446',
+              accentColorForeground: 'white',
               borderRadius: 'large',
               fontStack: 'system',
               overlayBlur: 'small',

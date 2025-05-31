@@ -53,7 +53,7 @@ export default function Home() {
           className="bg-[#fb9623] hover:bg-orange-500 text-black font-semibold px-8 py-3 text-lg rounded-xl"
           onClick={() => {
             console.log("Launch dApp clicked")
-            router.push('/explore');
+            router.push('/portfolio');
           }}
         >
           Launch dApp
