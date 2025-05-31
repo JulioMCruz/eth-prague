@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Vault,
   ArrowUp,
@@ -10,12 +10,21 @@ import {
 } from "lucide-react";
 import Header from "@/components/header";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { WithdrawXrpModal } from "@/components/modal/withdraw-xrp-modal"
 
 const VaultPage = () => {
   const vaultBalance = 12500; // Dummy data
   const monthlyGain = "+8.4%";
   const totalDeposited = 11580;
   const totalGain = vaultBalance - totalDeposited;
+
+  const [isWithdrawXrpModalOpen, setIsWithdrawXrpModalOpen] = useState(false);
+
+  const handleWithdrawXrp = (lots: string, address: string) => {
+    console.log("Withdraw XRP initiated:", { lots, address })
+    // Implement actual withdrawal logic here
+  }  
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#1B1B3A" }}>
@@ -133,14 +142,20 @@ const VaultPage = () => {
             </div>
 
             {/* XRP Withdraw Option */}
-            <Link
-              href="/withdraw?currency=xrp"
+            <Button
               className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-orange-500/20 text-orange-400 border border-orange-500/30 font-medium rounded-lg hover:bg-orange-500/30 transition-all duration-300"
-            >
+              onClick={() => setIsWithdrawXrpModalOpen(true)}
+              >
               <Coins className="w-4 h-4" />
               Withdraw in XRP
-            </Link>
+            </Button>
           </div>
+
+          <WithdrawXrpModal
+          open={isWithdrawXrpModalOpen}
+          onOpenChange={setIsWithdrawXrpModalOpen}
+          onWithdraw={handleWithdrawXrp}
+        />          
         </div>
       </main>
     </div>
