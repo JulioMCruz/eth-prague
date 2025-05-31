@@ -23,7 +23,7 @@ export function WithdrawXrpModal({ open, onOpenChange, onWithdraw }: WithdrawXrp
   // Move useReadContract to component level
   const { refetch } = useReadContract({
     abi,
-    address: '0x9f0D97229687439CC70a46890b981510CBad1253',
+    address: '0x076f26d6d8A0fBf4C900D312c4709b3032655686',
     functionName: 'getAllPriceInfo',
     chainId: 114,
     query: {
@@ -70,7 +70,7 @@ export function WithdrawXrpModal({ open, onOpenChange, onWithdraw }: WithdrawXrp
       
       writeContract({
         abi,
-        address: '0x9f0D97229687439CC70a46890b981510CBad1253',
+        address: '0x076f26d6d8A0fBf4C900D312c4709b3032655686',
         functionName: 'swapAndRedeem',
         args: [lotsAmount, address],
         chainId: 114,
