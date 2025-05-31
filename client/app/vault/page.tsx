@@ -9,7 +9,6 @@ import {
   Shield,
 } from "lucide-react";
 import Header from "@/components/header";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { WithdrawXrpModal } from "@/components/modal/withdraw-xrp-modal"
 
@@ -20,11 +19,20 @@ const VaultPage = () => {
   const totalGain = vaultBalance - totalDeposited;
 
   const [isWithdrawXrpModalOpen, setIsWithdrawXrpModalOpen] = useState(false);
+  const [amount, setAmount] = useState("");
 
   const handleWithdrawXrp = (lots: string, address: string) => {
     console.log("Withdraw XRP initiated:", { lots, address })
     // Implement actual withdrawal logic here
-  }  
+  }
+
+  const handleDeposit = () => {
+    console.log("Deposit clicked - Amount:", amount);
+  };
+
+  const handleWithdraw = () => {
+    console.log("Withdraw clicked - Amount:", amount);
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#1B1B3A" }}>
@@ -130,21 +138,33 @@ const VaultPage = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <Link
-                href="/deposit"
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-[#F3F4F6] text-[#1B1B3A] font-bold rounded-lg hover:bg-[#F3F4F6]/90 transition-all duration-300 hover:scale-105"
-              >
-                <ArrowDown className="w-4 h-4" />
-                Deposit
-              </Link>
-              <Link
-                href="/withdraw"
-                className="flex items-center justify-center gap-2 px-6 py-3 border border-white/30 text-white font-medium rounded-lg hover:bg-white/10 transition-all duration-300"
-              >
-                <ArrowUp className="w-4 h-4" />
-                Withdraw
-              </Link>
+            <div className="mb-4">
+              {/* Amount Input */}
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Enter amount"
+                className="w-full mb-4 bg-white/10 border border-white/30 text-white placeholder-white/50 px-4 py-3 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-[#F3F4F6]/50 focus:border-[#F3F4F6]"
+              />
+              
+              {/* Buttons */}
+              <div className="grid grid-cols-2 gap-4">
+                <Button
+                  onClick={handleDeposit}
+                  className="flex items-center justify-center gap-2 px-6 py-3 bg-[#F3F4F6] text-[#1B1B3A] font-bold rounded-lg hover:bg-[#F3F4F6]/90 transition-all duration-300 hover:scale-105"
+                >
+                  <ArrowDown className="w-4 h-4" />
+                  Deposit
+                </Button>
+                <Button
+                  onClick={handleWithdraw}
+                  className="flex items-center justify-center gap-2 px-6 py-3 border border-white/30 text-white font-medium rounded-lg hover:bg-white/10 transition-all duration-300 bg-transparent"
+                >
+                  <ArrowUp className="w-4 h-4" />
+                  Withdraw
+                </Button>
+              </div>
             </div>
 
             {/* XRP Withdraw Option */}
