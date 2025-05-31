@@ -123,3 +123,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .font-clash-grotesk {
+    font-family: var(--font-clash-grotesk), sans-serif;
+  }
+}
