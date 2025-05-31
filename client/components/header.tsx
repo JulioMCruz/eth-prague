@@ -40,9 +40,11 @@ function Header() {
                 {item.name}
               </Link>
             ))}
+                  <Link href="/vault" className="text-xs sm:text-sm font-medium hover:text-[#f09630] transition-colors">
                     <Button className="bg-[#c28446] text-white hover:bg-[#b0703c] rounded-lg text-xs px-3 py-1.5 sm:text-sm sm:px-4 sm:py-2 mx-2">
                         Add Funds to Vault
                     </Button>
+                  </Link>
                 </>
             )}
 
