@@ -88,10 +88,8 @@ const totalValueInVaultEmpty = {
   changePercent: 0, 
 }
 
-// Empty data for the chart
 const portfolioPerformanceDataEmpty: { name: string; value: number }[] = []
 
-// Empty data for positions - now with proper types
 const openPositionsDataEmpty: OpenPosition[] = []
 const pastPositionsDataEmpty: PastPosition[] = []
 
@@ -102,13 +100,11 @@ export default function PortfolioPage() {
     <div className="min-h-screen bg-[#f3ebd5] text-[#30261f]">
       <Header />
 
-      {/* Main Content - Identical to Dashboard */}
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#30261f] mb-8">Overview</h1>
 
         {isConnected && (
           <>
-            {/* Total Value Card */}
             <Card className="mb-8 bg-[#fff9ef] border-[#e9d7c1] shadow-sm rounded-xl">
               <CardContent className="p-6">
                 <p className="text-sm text-[#7f664a] mb-1">Total Value in Vault</p>
@@ -124,7 +120,6 @@ export default function PortfolioPage() {
               </CardContent>
             </Card>
 
-            {/* Portfolio Performance Card */}
             <Card className="mb-8 bg-[#fff9ef] border-[#e9d7c1] shadow-sm rounded-xl">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <div>
