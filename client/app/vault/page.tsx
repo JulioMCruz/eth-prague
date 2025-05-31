@@ -1,28 +1,18 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { usePathname } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import Header from "@/components/header"
 
 export default function VaultPage() {
-  const pathname = usePathname()
   const vaultBalance = 12500 // Dummy data
-
-  const getLinkClassName = (href: string, currentPathname: string) => {
-    return `text-sm font-medium hover:text-[#f09630] ${
-      currentPathname.startsWith(href) ? "text-[#f09630]" : "text-[#7f664a]"
-    }`
-  }
 
   return (
     <div className="min-h-screen bg-[#f3ebd5] text-[#30261f] flex flex-col">
       <Header />
 
 
-      {/* Main Content */}
       <main className="flex-grow flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-md text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-[#30261f] mb-10">Your Vault</h1>
