@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TrendingUp, TrendingDown } from "lucide-react"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import Header from "@/components/header"
-import { useAccount } from "wagmi";
+import { useAccount } from "wagmi"
 
 const totalValueInVault = {
   amount: 12500,
@@ -24,7 +24,23 @@ const portfolioPerformanceData = [
   { name: "Jul", value: 5200 },
 ]
 
-const openPositionsData = [
+interface OpenPosition {
+  id: string
+  name: string
+  imageUrl: string
+  performance: number
+}
+
+interface PastPosition {
+  id: string
+  name: string
+  status: string
+  exitTime: string
+  pnl: number
+  currency: string
+}
+
+const openPositionsData: OpenPosition[] = [
   {
     id: "op1",
     name: "Meme Momentum Fund",
@@ -39,7 +55,7 @@ const openPositionsData = [
   },
 ]
 
-const pastPositionsData = [
+const pastPositionsData: PastPosition[] = [
   {
     id: "pp1",
     name: "Cross-Chain Arbitrage Fund",
@@ -75,13 +91,11 @@ const totalValueInVaultEmpty = {
 // Empty data for the chart
 const portfolioPerformanceDataEmpty: { name: string; value: number }[] = []
 
-// Empty data for positions
-const openPositionsDataEmpty: any[] = [] // Using any[] for simplicity, define interface if needed
-const pastPositionsDataEmpty: any[] = []
-
+// Empty data for positions - now with proper types
+const openPositionsDataEmpty: OpenPosition[] = []
+const pastPositionsDataEmpty: PastPosition[] = []
 
 export default function PortfolioPage() {
-
   const { isConnected } = useAccount()
 
   return (
@@ -92,7 +106,7 @@ export default function PortfolioPage() {
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#30261f] mb-8">Overview</h1>
 
-        {isConnected! && (
+        {isConnected && (
           <>
             {/* Total Value Card */}
             <Card className="mb-8 bg-[#fff9ef] border-[#e9d7c1] shadow-sm rounded-xl">
@@ -231,7 +245,7 @@ export default function PortfolioPage() {
           </>
         )}
 
-        {!isConnected! && (
+        {!isConnected && (
           <>
             <Card className="mb-8 bg-[#fff9ef] border-[#e9d7c1] shadow-sm rounded-xl">
                 <CardContent className="p-6">
