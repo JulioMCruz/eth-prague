@@ -44,8 +44,8 @@ export default function Home() {
 
       {/* Hero Content - Just Title Centered */}
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-center">
-        <h1 className="text-7xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tight font-clash-grotesk mb-1">
-          One Chain To Rule Them All
+        <h1 className="text-7xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white leading-[0.85] tracking-tight font-clash-grotesk mb-1">
+          One Chain &amp; Rule Them All
         </h1>
         <p className="text-sm text-white/70 font-medium max-w-2xl mx-auto">
           Stop wrestling with fragmented DeFi. Unite everything under one
