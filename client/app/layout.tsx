@@ -7,7 +7,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { lightTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { config } from '@/lib/wagmi';
 
 const geistSans = Geist({
@@ -38,9 +38,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <WagmiProvider config={config} reconnectOnMount={false}>
+        <WagmiProvider config={config}>
           <QueryClientProvider client={client}>
-            <RainbowKitProvider modalSize="compact">
+            <RainbowKitProvider 
+            modalSize="compact"
+            theme={lightTheme({
+              accentColor: '#f09630',
+              accentColorForeground: 'black',
+              borderRadius: 'large',
+              fontStack: 'system',
+              overlayBlur: 'small',
+            })}
+            >
               {children}
             </RainbowKitProvider>
           </QueryClientProvider>

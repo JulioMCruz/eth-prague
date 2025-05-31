@@ -3,8 +3,10 @@
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function Home() {
+  const router = useRouter()
   return (
     <div className="relative min-h-screen bg-[#171714] text-white flex flex-col items-center justify-center p-4 md:p-8 overflow-hidden">
       <header className="absolute top-0 left-1/2 -translate-x-1/2 z-20 py-6 md:py-8">
@@ -51,7 +53,7 @@ export default function Home() {
           className="bg-[#fb9623] hover:bg-orange-500 text-black font-semibold px-8 py-3 text-lg rounded-xl"
           onClick={() => {
             console.log("Launch dApp clicked")
-            // router.push('/my-funds');
+            router.push('/explore');
           }}
         >
           Launch dApp
