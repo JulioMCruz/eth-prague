@@ -13,6 +13,8 @@
     "test": "hardhat test"
   },
   "dependencies": {
+    "@layerzerolabs/lz-evm-oapp-v2": "^3.0.99",
+    "@stargatefinance/stg-evm-v2": "^2.0.4",
     "@types/node": "^20.12.7",
     "dotenv": "^16.4.5"
   },
