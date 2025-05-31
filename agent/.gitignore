@@ -9,6 +9,8 @@ Thumbs.db
 
 dist/**/*
 
+dist
+
 
 lib-cov
 *.seed
