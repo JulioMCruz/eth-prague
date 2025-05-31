@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Header from "@/components/header"
+import Link from "next/link"
 
 export default function VaultPage() {
   const vaultBalance = 12500 // Dummy data
@@ -33,18 +34,22 @@ export default function VaultPage() {
           </Card>
 
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <Button
-              size="lg"
-              className="bg-[#e7b26e] hover:bg-[#d9a05c] text-[#30261f] font-semibold py-3 text-base rounded-lg shadow-md"
-            >
-              Withdraw
-            </Button>
-            <Button
-              size="lg"
-              className="bg-[#b96b28] hover:bg-[#a05d23] text-white font-semibold py-3 text-base rounded-lg shadow-md"
-            >
-              Deposit
-            </Button>
+            <Link href="/withdraw">
+              <Button
+                size="lg"
+                className="bg-[#e7b26e] hover:bg-[#d9a05c] text-[#30261f] font-semibold py-3 text-base rounded-lg shadow-md w-full"
+              >
+                Withdraw
+              </Button>
+            </Link>
+            <Link href="/deposit">
+              <Button
+                size="lg"
+                className="bg-[#b96b28] hover:bg-[#a05d23] text-white font-semibold py-3 text-base rounded-lg shadow-md w-full"
+              >
+                Deposit
+              </Button>
+            </Link>
           </div>
 
           <Button
