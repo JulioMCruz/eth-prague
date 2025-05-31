@@ -583,6 +583,7 @@ export default function FundDetailPage({
   const resolvedParams = use(params);
   const fund = findFundById(resolvedParams.fundid);
   const [selectedTimeframe, setSelectedTimeframe] = useState("7d");
+  const [amount, setAmount] = useState("");
 
   if (!fund) {
     return (
@@ -706,13 +707,28 @@ export default function FundDetailPage({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4">
-              <Button className="bg-[#F3F4F6] text-[#1B1B3A] hover:bg-[#F3F4F6]/90 px-8 py-3 text-lg font-bold">
+            <div className="flex gap-4 items-center">
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Amount"
+                className="bg-white/10 border border-white/30 text-white placeholder-white/50 px-4 py-3 rounded-lg text-lg w-48 focus:outline-none focus:ring-2 focus:ring-[#F3F4F6]/50 focus:border-[#F3F4F6]"
+              />
+              <Button 
+                className="bg-[#F3F4F6] text-[#1B1B3A] hover:bg-[#F3F4F6]/90 px-8 py-3 text-lg font-bold"
+                onClick={() => {
+                  console.log("Invest clicked - Amount:", amount);
+                }}
+              >
                 Invest Now
               </Button>
               <Button
                 variant="outline"
                 className="border-white/30 text-white hover:bg-white/10 px-8 py-3 text-lg"
+                onClick={() => {
+                  console.log("Withdraw clicked - Amount:", amount);
+                }}
               >
                 Withdraw
               </Button>
