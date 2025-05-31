@@ -4,7 +4,7 @@ import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
-import { lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { config } from "@/lib/wagmi";
 
 export default function Web3Provider({
@@ -18,8 +18,8 @@ export default function Web3Provider({
       <QueryClientProvider client={client}>
         <RainbowKitProvider
           modalSize="compact"
-          theme={lightTheme({
-            accentColor: "#c28446",
+          theme={darkTheme({
+            accentColor: "#8431ff",
             accentColorForeground: "white",
             borderRadius: "large",
             fontStack: "system",
