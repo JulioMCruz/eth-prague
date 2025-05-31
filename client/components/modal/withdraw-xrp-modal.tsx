@@ -6,6 +6,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+// import { useReadContract } from 'wagmi'
+// import { abi } from '@/lib/abi'
+
 interface WithdrawXrpModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -15,14 +18,22 @@ interface WithdrawXrpModalProps {
 export function WithdrawXrpModal({ open, onOpenChange, onWithdraw }: WithdrawXrpModalProps) {
   const [lots, setLots] = useState("")
   const [address, setAddress] = useState("")
-  const [xrpPriceInfo, setXrpPriceInfo] = useState({ lotSizeFXRP: 10, lotValueUSD: 20 }) // Dummy initial data
+  const [xrpPriceInfo] = useState({ lotSizeFXRP: 10, lotValueUSD: 20 }) // Dummy initial data
 
   const handleGetPrice = async () => {
     // Placeholder: Fetch actual price info
     console.log("Fetching XRP price info...")
     // Simulate fetching new data
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    setXrpPriceInfo({ lotSizeFXRP: 12, lotValueUSD: 24 }) // Example update
+    // await new Promise((resolve) => setTimeout(resolve, 500))
+    // setXrpPriceInfo({ lotSizeFXRP: 12, lotValueUSD: 24 }) // Example update
+
+    // const result = useReadContract({
+    //     abi,
+    //     address: '0x9f0D97229687439CC70a46890b981510CBad1253',
+    //     functionName: 'getAllPriceInfo',
+    //   })
+
+    //   console.log(result);
   }
 
   const handleSubmit = () => {
