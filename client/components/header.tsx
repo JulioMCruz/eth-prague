@@ -92,7 +92,8 @@ function Header() {
               </Link>
             )}
 
-            <ConnectButton.Custom>
+            <ConnectButton />
+            {/* <ConnectButton.Custom>
               {({
                 account,
                 chain,
@@ -170,7 +171,7 @@ function Header() {
                   </div>
                 );
               }}
-            </ConnectButton.Custom>
+            </ConnectButton.Custom> */}
           </div>
         </div>
       </div>
