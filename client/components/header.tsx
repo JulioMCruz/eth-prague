@@ -60,7 +60,7 @@ function Header() {
                 >
                   Funds
                 </Link>
-                <Link
+                {/* <Link
                   href="/analytics"
                   className={`transition-colors font-medium ${
                     pathname === "/analytics"
@@ -79,7 +79,7 @@ function Header() {
                   }`}
                 >
                   Rewards
-                </Link>
+                </Link> */}
               </>
             )}
           </nav>

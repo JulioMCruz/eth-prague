@@ -22,6 +22,7 @@ const FundsPage = () => {
         performance: "+45.2%",
         investors: 1247,
         image: "/data/c1_meme-fund.jpg", // Add your image path
+        available: true,
       },
       {
         id: "ai-2",
@@ -35,6 +36,7 @@ const FundsPage = () => {
         performance: "+23.1%",
         investors: 892,
         image: "/data/c1_arbitrage.jpg",
+        available: false,
       },
       {
         id: "ai-3",
@@ -48,6 +50,7 @@ const FundsPage = () => {
         performance: "+18.7%",
         investors: 2156,
         image: "/data/c1_blue-chip.jpg",
+        available: false,
       },
     ],
     aiHybrid: [
@@ -63,6 +66,7 @@ const FundsPage = () => {
         performance: "+31.4%",
         investors: 743,
         image: "/data/c2_RWA.jpg",
+        available: false,
       },
       {
         id: "hybrid-2",
@@ -76,6 +80,7 @@ const FundsPage = () => {
         performance: "+52.3%",
         investors: 456,
         image: "/data/c2_news.jpg",
+        available: false,
       },
       {
         id: "hybrid-3",
@@ -89,6 +94,7 @@ const FundsPage = () => {
         performance: "+29.8%",
         investors: 1829,
         image: "/data/c2_cross-market.jpg",
+        available: false,
       },
     ],
     humanManaged: [
@@ -104,6 +110,7 @@ const FundsPage = () => {
         performance: "+67.9%",
         investors: 3421,
         image: "/data/c3_professional.jpg",
+        available: false,
       },
       {
         id: "human-2",
@@ -117,6 +124,7 @@ const FundsPage = () => {
         performance: "+38.6%",
         investors: 987,
         image: "/data/c3_community.jpg",
+        available: false,
       },
       {
         id: "human-3",
@@ -130,6 +138,7 @@ const FundsPage = () => {
         performance: "+41.3%",
         investors: 5632,
         image: "/data/c3_institutional.png",
+        available: false,
       },
     ],
   };
@@ -252,6 +261,7 @@ const FundCard = ({
     performance: string;
     investors: number;
     image?: string; // Optional image field
+    available: boolean;
   };
   router: ReturnType<typeof useRouter>;
 }) => {
@@ -269,25 +279,38 @@ const FundCard = ({
   };
 
   const handleCardClick = () => {
-    router.push(`/funds/${fund.id}`);
+    if (fund.available) {
+      router.push(`/funds/${fund.id}`);
+    }
   };
 
   return (
     <div
       onClick={handleCardClick}
-      className="bg-black/20 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden hover:bg-black/30 hover:border-white/30 transition-all duration-300 group cursor-pointer hover:scale-105"
+      className={`bg-black/20 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden transition-all duration-300 group ${
+        fund.available 
+          ? "hover:bg-black/30 hover:border-white/30 cursor-pointer hover:scale-105" 
+          : "opacity-60 cursor-not-allowed"
+      }`}
     >
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <img
           src={fund.image}
           alt={fund.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+          className={`w-full h-full object-cover transition-transform duration-300 ${
+            fund.available ? "group-hover:scale-110" : "filter grayscale"
+          }`}
         />
-        <div
-          className="w-full h-full bg-gradient-to-br from-[#1B1B3A] to-[#F3F4F6]/20 hidden"
-          style={{ display: "none" }}
-        />
+        
+        {/* Overlay for unavailable funds */}
+        {!fund.available && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white font-bold text-lg border border-white/30">
+              Coming Soon
+            </span>
+          </div>
+        )}
 
         {/* Badges */}
         <div className="absolute top-4 right-4 flex flex-col gap-2">
@@ -312,7 +335,11 @@ const FundCard = ({
       <div className="p-6">
         {/* Header */}
         <div className="mb-3">
-          <h3 className="text-xl font-bold text-white group-hover:text-[#F3F4F6] transition-colors mb-1">
+          <h3 className={`text-xl font-bold transition-colors mb-1 ${
+            fund.available 
+              ? "text-white group-hover:text-[#F3F4F6]" 
+              : "text-white/60"
+          }`}>
             {fund.name}
           </h3>
           <div className="flex items-center space-x-2 text-sm text-white/60">
@@ -322,7 +349,9 @@ const FundCard = ({
         </div>
 
         {/* Description */}
-        <p className="text-white/70 text-sm mb-4 line-clamp-2">
+        <p className={`text-sm mb-4 line-clamp-2 ${
+          fund.available ? "text-white/70" : "text-white/50"
+        }`}>
           {fund.description}
         </p>
 
@@ -330,11 +359,15 @@ const FundCard = ({
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <p className="text-white/60 text-xs mb-1">APY</p>
-            <p className="text-green-400 font-bold text-lg">{fund.apy}</p>
+            <p className={`font-bold text-lg ${
+              fund.available ? "text-green-400" : "text-green-400/50"
+            }`}>{fund.apy}</p>
           </div>
           <div>
             <p className="text-white/60 text-xs mb-1">TVL</p>
-            <p className="text-white font-bold text-lg">{fund.tvl}</p>
+            <p className={`font-bold text-lg ${
+              fund.available ? "text-white" : "text-white/50"
+            }`}>{fund.tvl}</p>
           </div>
         </div>
 
@@ -347,8 +380,8 @@ const FundCard = ({
           <div
             className={`font-bold flex items-center space-x-1 text-sm ${
               fund.performance.startsWith("+")
-                ? "text-green-400"
-                : "text-red-400"
+                ? fund.available ? "text-green-400" : "text-green-400/50"
+                : fund.available ? "text-red-400" : "text-red-400/50"
             }`}
           >
             {fund.performance.startsWith("+") ? (
@@ -362,18 +395,37 @@ const FundCard = ({
 
         {/* CTA Buttons */}
         <div className="flex gap-2">
-          <Link
-            href={`/funds/${fund.id}`}
-            className="flex-1 px-4 py-2 bg-[#F3F4F6] text-[#1B1B3A] font-bold rounded-lg hover:bg-[#F3F4F6]/90 transition-all duration-300 hover:scale-105 text-sm"
-          >
-            Invest Now
-          </Link>
-          <Link
-            href={`/funds/${fund.id}`}
-            className="px-4 py-2 border border-white/30 text-white font-medium rounded-lg hover:bg-white/10 transition-all duration-300 text-sm"
-          >
-            Details
-          </Link>
+          {fund.available ? (
+            <>
+              <Link
+                href={`/funds/${fund.id}`}
+                className="flex-1 px-4 py-2 bg-[#F3F4F6] text-[#1B1B3A] font-bold rounded-lg hover:bg-[#F3F4F6]/90 transition-all duration-300 hover:scale-105 text-sm text-center"
+              >
+                Invest Now
+              </Link>
+              <Link
+                href={`/funds/${fund.id}`}
+                className="px-4 py-2 border border-white/30 text-white font-medium rounded-lg hover:bg-white/10 transition-all duration-300 text-sm"
+              >
+                Details
+              </Link>
+            </>
+          ) : (
+            <>
+              <button
+                disabled
+                className="flex-1 px-4 py-2 bg-white/10 text-white/40 font-bold rounded-lg cursor-not-allowed text-sm"
+              >
+                Unavailable
+              </button>
+              <button
+                disabled
+                className="px-4 py-2 border border-white/20 text-white/40 font-medium rounded-lg cursor-not-allowed text-sm"
+              >
+                Details
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
