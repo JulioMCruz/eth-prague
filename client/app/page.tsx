@@ -1,63 +1,92 @@
-"use client"
-
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import React from "react";
+import Spline from "@splinetool/react-spline/next";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
-  const router = useRouter()
   return (
-    <div className="relative min-h-screen bg-[#171714] text-white flex flex-col items-center justify-center p-4 md:p-8 overflow-hidden">
-      <header className="absolute top-0 left-1/2 -translate-x-1/2 z-20 py-6 md:py-8">
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/assets/kairos.png"
-            alt="Kairos logo icon"
-            width={36}
-            height={36}
-            className="filter invert brightness-0" 
-          />
-          <span className="ml-2 text-3xl font-bold text-white">kairos</span>
-        </Link>
+    <div className="relative h-screen w-full overflow-hidden bg-black">
+      {/* Spline 3D Background */}
+      <div className="absolute inset-0 w-full h-full">
+        <Spline
+          scene="https://prod.spline.design/JzBmC4cOUyDCPHkA/scene.splinecode"
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      </div>
+
+      {/* Oval Header */}
+      <header className="w-[90vw] mx-auto relative z-20 flex justify-center pt-8">
+        <div className="backdrop-blur-xl bg-black/30 border border-white/20 rounded-full px-12 py-4 flex items-center justify-between w-full shadow-2xl">
+          <div className="flex items-center">
+            <Image
+              src="/assets/kairos.png"
+              alt="Kairos logo icon"
+              width={32}
+              height={32}
+              className="filter invert brightness-0"
+            />
+            <span className="ml-3 text-xl font-bold text-white tracking-wide">
+              kairos
+            </span>
+          </div>
+
+          <Link
+            href="/"
+            className="px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-purple-500/50 text-sm"
+          >
+            Launch dApp
+          </Link>
+        </div>
       </header>
 
-      {/* <div className="absolute inset-0 opacity-40 md:opacity-50 pointer-events-none z-0">
-        <Image
-          src="/hero-background-element.jpg" 
-          alt="Abstract background element"
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          className="transform scale-150 md:scale-125 -translate-x-1/3 md:-translate-x-1/4 lg:-translate-x-1/3"
-        />
-      </div> */}
+      {/* Hero Content - Just Title Centered */}
+      <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-center">
+        <h1 className="text-7xl md:text-8xl lg:text-9xl font-black text-white leading-[0.85] tracking-tight font-clash-grotesk mb-1">
+          One Chain To Rule Them All
+        </h1>
+        <p className="text-sm text-white/70 font-medium max-w-2xl mx-auto">
+          Stop wrestling with fragmented DeFi. Unite everything under one
+          intelligent platform.
+        </p>
+      </div>
 
-      <main className="relative z-10 flex flex-col items-center justify-center text-center flex-grow space-y-8 pt-20 pb-20 md:pt-24">
-        {" "}
-        <div className="max-w-2xl lg:max-w-3xl space-y-6">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-            <span className="text-[#fb9623]">One</span> token. <span className="text-[#fb9623]">Any</span> chain.
-            <br />
-            Automated capital.
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300">
-            Cross-chain investing made simple. DeFi, without the chaos.
-          </p>
+      {/* Bottom Full Width Section - Three Columns */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 bg-black/20 backdrop-blur-sm border-t border-white/10">
+        <div className="flex justify-between items-start px-16 py-4 max-w-full">
+          <div className="flex-1 max-w-sm">
+            <h3 className="text-xs font-bold text-white mb-1">
+              Stop the DeFi Chaos
+            </h3>
+            <p className="text-xs text-white/90 leading-tight">
+              No more jumping between 120+ chains, tracking 1000+ protocols, or
+              missing opportunities while you sleep.
+            </p>
+          </div>
+
+          <div className="flex-1 max-w-sm mx-16">
+            <h3 className="text-xs font-bold text-white mb-1">
+              AI-Powered Unification
+            </h3>
+            <p className="text-xs text-white/60 leading-tight">
+              Our intelligent platform automatically finds the best yields
+              across all chains and manages your entire DeFi portfolio.
+            </p>
+          </div>
+
+          <div className="flex-1 max-w-sm">
+            <h3 className="text-xs font-bold text-white mb-1">
+              Zero-Friction Experience
+            </h3>
+            <p className="text-xs text-white/95 leading-tight">
+              Seamless cross-chain operations, minimal gas costs, and automated
+              yield optimization. DeFi made simple.
+            </p>
+          </div>
         </div>
-      </main>
-
-      <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 z-20">
-        <Button
-          size="lg"
-          className="bg-[#fb9623] hover:bg-orange-500 text-black font-semibold px-8 py-3 text-lg rounded-xl"
-          onClick={() => {
-            console.log("Launch dApp clicked")
-            router.push('/portfolio');
-          }}
-        >
-          Launch dApp
-        </Button>
       </div>
     </div>
-  )}
+  );
+}
