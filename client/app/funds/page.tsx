@@ -5,12 +5,10 @@ import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { useAccount } from "wagmi";
 import { useState } from "react"
 import { TrendingUp, TrendingDown } from "lucide-react"
-
-
+import Header from "@/components/header"
 
 const exploreFundsData = {
   trending: [
@@ -195,7 +193,7 @@ interface Fund {
 
 function FundCard({ fund }: { fund: Fund }) {
   return (
-    <Link href={`/explore/${fund.id}`} passHref legacyBehavior>
+    <Link href={`/funds/${fund.id}`} passHref legacyBehavior>
       <a className="block group">
         <Card className="bg-white border-transparent hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden h-full flex flex-col">
           <div className="relative">
@@ -245,9 +243,6 @@ function FundSection({ title, funds }: { title: string; funds: Fund[] }) {
   )
 }
 
-
-
-// Card for "Open Positions" in "My Funds" Tab
 function OpenPositionCard({ position }: { position: OpenPosition }) {
     return (
       <Card className="bg-transparent border-none shadow-none overflow-hidden rounded-xl">
@@ -309,29 +304,7 @@ export default function ExplorePage() {
   
   return (
     <div className="min-h-screen bg-[#f3ebd5]">
-      {/* Header */}
-      <header className="py-5 px-4 sm:px-6 lg:px-8 border-b border-[#e9d7c1]">
-        <div className="container mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2">
-            <Image src="/assets/kairos-orange.png" alt="Kairos logo icon" width={28} height={28} />
-            <span className="text-xl font-bold text-[#30261f]">kairos</span>
-          </Link>
-          <div className="flex items-center space-x-4">
-            {!isConnected! && (
-            <Link href="/explore" className="text-sm font-medium text-[#30261f]">All Funds</Link>
-            )}
-            {isConnected! && (
-                <div>
-                    <Link href="/explore" className="text-sm font-medium text-[#30261f] mx-2">Portofolio</Link>
-                    <Link href="/explore" className="text-sm font-medium text-[#30261f] mx-2">Funds</Link>
-                </div>
-            )}
-
-            <ConnectButton />
-          </div>
-        </div>
-      </header>
-
+      <Header />
       <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
 
