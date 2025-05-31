@@ -92,8 +92,7 @@ function Header() {
               </Link>
             )}
 
-            <ConnectButton />
-            {/* <ConnectButton.Custom>
+            <ConnectButton.Custom>
               {({
                 account,
                 chain,
@@ -156,6 +155,37 @@ function Header() {
                       }
 
                       return (
+                      <div style={{ display: 'flex', gap: 12 }}>
+                        <div
+                          className="px-4 py-2 border rounded-full text-white text-sm font-medium cursor-pointer hover:bg-white/10 transition-all duration-300"
+                          style={{
+                            background: "rgba(147, 51, 234, 0.2)",
+                            borderColor: "rgba(147, 51, 234, 0.5)",
+                          }}
+                          onClick={openChainModal}
+                        >
+                          {chain.hasIcon && (
+                            <div
+                              style={{
+                                background: chain.iconBackground,
+                                width: 12,
+                                height: 12,
+                                borderRadius: 999,
+                                overflow: 'hidden',
+                                marginRight: 4,
+                              }}
+                            >
+                              {chain.iconUrl && (
+                                <img
+                                  alt={chain.name ?? 'Chain icon'}
+                                  src={chain.iconUrl}
+                                  style={{ width: 12, height: 12 }}
+                                />
+                              )}
+                            </div>
+                          )}
+                          {chain.name}
+                        </div>
                         <div
                           className="px-4 py-2 border rounded-full text-white text-sm font-medium cursor-pointer hover:bg-white/10 transition-all duration-300"
                           style={{
@@ -166,12 +196,13 @@ function Header() {
                         >
                           {account.displayName}
                         </div>
+                      </div>
                       );
                     })()}
                   </div>
                 );
               }}
-            </ConnectButton.Custom> */}
+            </ConnectButton.Custom>
           </div>
         </div>
       </div>
