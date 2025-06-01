@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
@@ -18,7 +19,7 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
-import { useState, use } from "react";
+import { useState, use, useEffect, useRef } from "react";
 import Header from "@/components/header";
 import {
   Table,
@@ -28,6 +29,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useWriteContract, useWaitForTransactionReceipt, useAccount } from "wagmi"
+import { abi } from "@/lib/abi"
+import { toast, Toaster } from "sonner";
 
 interface Fund {
   id: string;
@@ -575,6 +579,8 @@ const getRiskColor = (risk: string) => {
   }
 };
 
+const CONTRACT_ADDRESS = "0xb27A31f1b0AF2946B7F582768f03239b1eC07c2c"
+
 export default function FundDetailPage({
   params,
 }: {
@@ -584,6 +590,104 @@ export default function FundDetailPage({
   const fund = findFundById(resolvedParams.fundid);
   const [selectedTimeframe, setSelectedTimeframe] = useState("7d");
   const [amount, setAmount] = useState("");
+  const [investHash, setInvestHash] = useState<`0x${string}` | undefined>()
+  const [withdrawHash, setWithdrawHash] = useState<`0x${string}` | undefined>()
+  const [isInvesting, setIsInvesting] = useState(false)
+  const [isWithdrawing, setIsWithdrawing] = useState(false)
+
+  const { data: investTxHash, isPending: isInvestPending, isError: isInvestError, error: investError, writeContract: writeInvestContract } = useWriteContract()
+  const { data: withdrawTxHash, isPending: isWithdrawPending, isError: isWithdrawError, error: withdrawError, writeContract: writeWithdrawContract } = useWriteContract()
+
+  const { isLoading: isInvestConfirming, isSuccess: isInvestConfirmed } = useWaitForTransactionReceipt({ hash: investHash })
+  const { isLoading: isWithdrawConfirming, isSuccess: isWithdrawConfirmed } = useWaitForTransactionReceipt({ hash: withdrawHash })
+
+  const { address } = useAccount()
+
+  // Toast guards
+  const investToastShown = useRef(false)
+  const withdrawToastShown = useRef(false)
+
+  useEffect(() => {
+    if (investTxHash && investTxHash !== investHash) {
+      setInvestHash(investTxHash)
+      setIsInvesting(false)
+    }
+  }, [investHash, investTxHash])
+
+  useEffect(() => {
+    if (withdrawTxHash && withdrawTxHash !== withdrawHash) {
+      setWithdrawHash(withdrawTxHash)
+      setIsWithdrawing(false)
+    }
+  }, [withdrawHash, withdrawTxHash])
+
+  useEffect(() => {
+    if (isInvestConfirmed && investHash && !investToastShown.current) {
+      toast.success(
+        <span>
+          Deposit confirmed!{' '}
+          <a href={`https://coston2-explorer.flare.network/tx/${investHash}`} target="_blank" rel="noopener noreferrer" className="underline text-blue-400 ml-2">View on Explorer</a>
+        </span>,
+        { duration: 5000 }
+      );
+      investToastShown.current = true;
+    }
+    if (!isInvestConfirmed) {
+      investToastShown.current = false;
+    }
+  }, [isInvestConfirmed, investHash]);
+
+  useEffect(() => {
+    if (isWithdrawConfirmed && withdrawHash && !withdrawToastShown.current) {
+      toast.success(
+        <span>
+          Withdraw confirmed!{' '}
+          <a href={`https://coston2-explorer.flare.network/tx/${withdrawHash}`} target="_blank" rel="noopener noreferrer" className="underline text-blue-400 ml-2">View on Explorer</a>
+        </span>,
+        { duration: 5000 }
+      );
+      withdrawToastShown.current = true;
+    }
+    if (!isWithdrawConfirmed) {
+      withdrawToastShown.current = false;
+    }
+  }, [isWithdrawConfirmed, withdrawHash]);
+
+  const handleInvest = async () => {
+    if (!amount) return
+    setIsInvesting(true)
+    try {
+      const assets = BigInt(Math.floor(Number(amount) * 1e18))
+      writeInvestContract({
+        abi,
+        address: CONTRACT_ADDRESS,
+        functionName: "depositAssets",
+        args: [assets],
+        chainId: 114,
+      })
+    } catch (err) {
+      setIsInvesting(false)
+      console.error("Deposit failed:", err)
+    }
+  }
+
+  const handleWithdraw = async () => {
+    if (!amount || !address) return
+    setIsWithdrawing(true)
+    try {
+      const assets = BigInt(Math.floor(Number(amount) * 1e18))
+      writeWithdrawContract({
+        abi,
+        address: CONTRACT_ADDRESS,
+        functionName: "withdraw",
+        args: [assets, address, address],
+        chainId: 114,
+      })
+    } catch (err) {
+      setIsWithdrawing(false)
+      console.error("Withdraw failed:", err)
+    }
+  }
 
   if (!fund) {
     return (
@@ -608,6 +712,7 @@ export default function FundDetailPage({
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#1B1B3A" }}>
       <Header />
+      <Toaster position="top-center" richColors />
 
       <main className="max-w-7xl mx-auto px-6 py-8">
         <Link
@@ -625,10 +730,13 @@ export default function FundDetailPage({
         <div className="bg-black/20 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden mb-8">
           {/* Image Section */}
           <div className="relative h-64 overflow-hidden">
-            <img
+            <Image
               src={fund.image}
               alt={fund.name}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 100vw"
+              priority
             />
             <div
               className="w-full h-full bg-gradient-to-br from-[#1B1B3A] to-[#F3F4F6]/20 hidden absolute inset-0"
@@ -717,20 +825,18 @@ export default function FundDetailPage({
               />
               <Button 
                 className="bg-[#F3F4F6] text-[#1B1B3A] hover:bg-[#F3F4F6]/90 px-8 py-3 text-lg font-bold"
-                onClick={() => {
-                  console.log("Invest clicked - Amount:", amount);
-                }}
+                onClick={handleInvest}
+                disabled={isInvesting || isInvestPending || isInvestConfirming}
               >
-                Invest Now
+                {isInvesting || isInvestPending ? "Confirm in Wallet..." : isInvestConfirming ? "Waiting for Confirmation..." : "Invest Now"}
               </Button>
               <Button
                 variant="outline"
                 className="border-white/30 text-white hover:bg-white/10 px-8 py-3 text-lg"
-                onClick={() => {
-                  console.log("Withdraw clicked - Amount:", amount);
-                }}
+                onClick={handleWithdraw}
+                disabled={isWithdrawing || isWithdrawPending || isWithdrawConfirming}
               >
-                Withdraw
+                {isWithdrawing || isWithdrawPending ? "Confirm in Wallet..." : isWithdrawConfirming ? "Waiting for Confirmation..." : "Withdraw"}
               </Button>
             </div>
           </div>
@@ -857,6 +963,53 @@ export default function FundDetailPage({
                 ))}
               </TableBody>
             </Table>
+          </div>
+        )}
+
+        {/* Transaction status for Invest */}
+        {(isInvesting || isInvestPending || isInvestConfirming || isInvestError) && (
+          <div className={`mt-4 p-4 rounded-lg ${
+            isInvestError ? 'bg-red-500/20 border border-red-500/40' :
+            isInvestConfirming ? 'bg-blue-500/20 border border-blue-500/40' :
+            ''
+          }`}>
+            <p className="text-sm">
+              {isInvesting || isInvestPending ? "Waiting for wallet confirmation..." : isInvestConfirming ? "Transaction is being confirmed..." : null}
+              {isInvestError && `Error: ${investError?.message || "Transaction failed"}`}
+            </p>
+            {investHash && (
+              <a
+                href={`https://coston2-explorer.flare.network/tx/${investHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                View on Explorer
+              </a>
+            )}
+          </div>
+        )}
+        {/* Transaction status for Withdraw */}
+        {(isWithdrawing || isWithdrawPending || isWithdrawConfirming || isWithdrawError) && (
+          <div className={`mt-4 p-4 rounded-lg ${
+            isWithdrawError ? 'bg-red-500/20 border border-red-500/40' :
+            isWithdrawConfirming ? 'bg-blue-500/20 border border-blue-500/40' :
+            ''
+          }`}>
+            <p className="text-sm">
+              {isWithdrawing || isWithdrawPending ? "Waiting for wallet confirmation..." : isWithdrawConfirming ? "Transaction is being confirmed..." : null}
+              {isWithdrawError && `Error: ${withdrawError?.message || "Transaction failed"}`}
+            </p>
+            {withdrawHash && (
+              <a
+                href={`https://coston2-explorer.flare.network/tx/${withdrawHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                View on Explorer
+              </a>
+            )}
           </div>
         )}
       </main>

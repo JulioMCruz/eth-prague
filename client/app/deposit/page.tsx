@@ -6,12 +6,36 @@ import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { useState } from "react"
 import Header from "@/components/header"
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi"
+import { abi } from "@/lib/abi" 
+
+// Import your contract ABI
+const CONTRACT_ADDRESS = "0xb27A31f1b0AF2946B7F582768f03239b1eC07c2c" // Your contract address
 
 export default function DepositPage() {
   const [amount, setAmount] = useState("")
+  const { isConnected } = useAccount()
 
-  const handleDeposit = () => {
-    console.log("Depositing amount:", amount)
+  // Prepare the write contract hook
+  const { writeContract, data: hash, isPending, isError, error } = useWriteContract()
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash })
+
+  const handleDeposit = async () => {
+    if (!amount || !isConnected) return
+
+    try {
+      // Convert amount to BigInt (assuming 18 decimals)
+      const assets = BigInt(Math.floor(Number(amount) * 1e18))
+      writeContract({
+        abi,
+        address: CONTRACT_ADDRESS,
+        functionName: "depositAssets", 
+        args: [assets],
+        chainId: 114,
+      })
+    } catch (err) {
+      console.error("Deposit failed:", err)
+    }
   }
 
   return (
@@ -49,16 +73,44 @@ export default function DepositPage() {
               onChange={(e) => setAmount(e.target.value)}
               className="flex-grow bg-[#fff9ef] border-[#e9d7c1] focus:border-[#c28446] focus:ring-[#c28446] placeholder:text-[#b9a389] text-[#30261f] text-base p-3 rounded-lg shadow-sm h-12"
               min="0"
-              step="any" 
+              step="any"
+              disabled={isPending || isConfirming}
             />
             <Button
               type="submit"
               size="lg"
               className="bg-[#b96b28] hover:bg-[#a05d23] text-white font-semibold py-3 text-base rounded-lg shadow-md h-12 px-8 w-full sm:w-auto"
+              disabled={isPending || isConfirming}
             >
-              Deposit
+              {isPending ? "Confirm in Wallet..." : isConfirming ? "Waiting for Confirmation..." : "Deposit"}
             </Button>
           </form>
+
+          {/* Transaction status */}
+          {(isPending || isConfirming || isConfirmed || isError) && (
+            <div className={`mt-4 p-4 rounded-lg ${
+              isError ? 'bg-red-500/20 border border-red-500/40' :
+              isConfirmed ? 'bg-green-500/20 border border-green-500/40' :
+              'bg-blue-500/20 border border-blue-500/40'
+            }`}>
+              <p className="text-sm">
+                {isPending && "Waiting for wallet confirmation..."}
+                {isConfirming && "Transaction is being confirmed..."}
+                {isConfirmed && "Deposit confirmed!"}
+                {isError && `Error: ${error?.message || "Transaction failed"}`}
+              </p>
+              {hash && (
+                <a
+                  href={`https://coston2-explorer.flare.network/tx/${hash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  View on Explorer
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </main>
     </div>
