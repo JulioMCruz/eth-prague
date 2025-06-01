@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/button";
 import { WithdrawXrpModal } from "@/components/modal/withdraw-xrp-modal"
 
 const VaultPage = () => {
-  const vaultBalance = 12500; // Dummy data
+  const vaultBalance = 125; // Dummy data
   const monthlyGain = "+8.4%";
-  const totalDeposited = 11580;
+  const totalDeposited = 105;
   const totalGain = vaultBalance - totalDeposited;
 
   const [isWithdrawXrpModalOpen, setIsWithdrawXrpModalOpen] = useState(false);
