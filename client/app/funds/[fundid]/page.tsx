@@ -116,16 +116,16 @@ const allFundsData: { [key: string]: Fund[] } = {
     },
     {
       id: "ai-2",
-      name: "Cross-Chain Arbitrage Pro",
+      name: "Flow Meme Fund",
       description:
-        "AI captures price differences and cross-chain opportunities with millisecond execution.",
-      apy: "+89.7%",
+        "AI tracks social sentiment and trades viral meme tokens with 85% accuracy rate.",
+      apy: "+78.6%",
       tvl: "$12.8M",
-      risk: "Medium",
-      manager: "ArbiBot Systems",
+      risk: "High ",
+      manager: "Flow Ecosystem ",
       performance: "+23.1%",
       investors: 892,
-      image: "/data/c1_arbitrage.jpg",
+      image: "/data/flow-meme-fund.png",
       longDescription:
         "Sophisticated arbitrage algorithm that identifies and exploits price differences across 15+ blockchain networks including Ethereum, BSC, Polygon, Arbitrum, and Solana. The system executes flash loans and cross-chain swaps automatically to capture risk-free profits from market inefficiencies.",
       chartData: [
