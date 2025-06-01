@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogClose, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { abi } from "@/lib/abi"
+import { abi } from "@/lib/abi-xrp"
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 
@@ -66,7 +66,7 @@ export function WithdrawXrpModal({ open, onOpenChange, onWithdraw }: WithdrawXrp
       // Convert lots to uint256 (assuming lots is a whole number)
       const lotsAmount = BigInt(lots)
       
-      console.log("Calling swapAndRedeem with:", { lots: lotsAmount, address })
+      console.log("Calling redeem with:", { lots: lotsAmount, address })
       
       writeContract({
         abi,
